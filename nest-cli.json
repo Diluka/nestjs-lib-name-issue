@@ -10,6 +10,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/demo/tsconfig.lib.json"
       }
+    },
+    "demo2": {
+      "type": "library",
+      "root": "libs/demo2",
+      "entryFile": "index",
+      "sourceRoot": "libs/demo2/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/demo2/tsconfig.lib.json"
+      }
     }
   },
   "compilerOptions": {

@@ -72,7 +72,9 @@
     ],
     "moduleNameMapper": {
       "@app/demo/(.*)": "<rootDir>/libs/demo/src/$1",
-      "@app/demo": "<rootDir>/libs/demo/src"
+      "@app/demo": "<rootDir>/libs/demo/src",
+      "@app/demo2/(.*)": "<rootDir>/libs/demo2/src/$1",
+      "@app/demo2": "<rootDir>/libs/demo2/src"
     }
   }
 }

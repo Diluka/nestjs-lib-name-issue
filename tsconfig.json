@@ -17,6 +17,12 @@
       ],
       "@app/demo/*": [
         "libs/demo/src/*"
+      ],
+      "@app/demo2": [
+        "libs/demo2/src"
+      ],
+      "@app/demo2/*": [
+        "libs/demo2/src/*"
       ]
     }
   }
