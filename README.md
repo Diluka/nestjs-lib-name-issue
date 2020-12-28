@@ -1,73 +1,81 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# nestjs-lib-name-issue
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+if a lib's name is another's name's prefix, e2e test will fail. [issue link](https://github.com/nestjs/nest/issues/6020)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+1. `nest new`
+2. `nest g lib demo`
+3. `nest g lib demo2`
+4. import both libs in `AppModule`
+5. `npm run test:e2e`
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
+# example output
 ```
+➜  nestjs-lib-name-issue git:(master) npm run test:e2e
 
-## Running the app
+> nestjs-lib-name-issue@0.0.1 test:e2e /Users/diluka/Source/Repos/nestjs-lib-name-issue
+> jest --config ./test/jest-e2e.json
 
-```bash
-# development
-$ npm run start
+ FAIL  test/app.e2e-spec.ts
+  AppController (e2e)
+    ✕ / (GET) (11 ms)
 
-# watch mode
-$ npm run start:dev
+  ● AppController (e2e) › / (GET)
 
-# production mode
-$ npm run start:prod
+    Nest cannot create the AppModule instance.
+    The module at index [1] of the AppModule "imports" array is undefined.
+
+    Potential causes:
+    - A circular dependency between modules. Use forwardRef() to avoid it. Read more: https://docs.nestjs.com/fundamentals/circular-dependency
+    - The module at index [1] is of type "undefined". Check your import statements and the type of the module.
+
+    Scope [RootTestModule]
+
+       8 | 
+       9 |   beforeEach(async () => {
+    > 10 |     const moduleFixture: TestingModule = await Test.createTestingModule({
+         |                                          ^
+      11 |       imports: [AppModule],
+      12 |     }).compile();
+      13 | 
+
+      at DependenciesScanner.scanForModules (../node_modules/@nestjs/core/scanner.js:49:23)
+      at DependenciesScanner.scanForModules (../node_modules/@nestjs/core/scanner.js:57:13)
+      at DependenciesScanner.scan (../node_modules/@nestjs/core/scanner.js:25:9)
+      at TestingModuleBuilder.compile (../node_modules/@nestjs/testing/testing-module.builder.js:37:9)
+      at Object.<anonymous> (app.e2e-spec.ts:10:42)
+
+  ● AppController (e2e) › / (GET)
+
+    TypeError: Cannot read property 'getHttpServer' of undefined
+
+      17 | 
+      18 |   it('/ (GET)', () => {
+    > 19 |     return request(app.getHttpServer())
+         |                        ^
+      20 |       .get('/')
+      21 |       .expect(200)
+      22 |       .expect('Hello World!');
+
+      at Object.<anonymous> (app.e2e-spec.ts:19:24)
+
+  console.log
+    [class DemoModule] undefined
+
+      at Object.<anonymous> (../src/app.module.ts:7:9)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 1 total
+Snapshots:   0 total
+Time:        2.959 s, estimated 4 s
+Ran all test suites.
+npm ERR! code ELIFECYCLE
+npm ERR! errno 1
+npm ERR! nestjs-lib-name-issue@0.0.1 test:e2e: `jest --config ./test/jest-e2e.json`
+npm ERR! Exit status 1
+npm ERR! 
+npm ERR! Failed at the nestjs-lib-name-issue@0.0.1 test:e2e script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /Users/diluka/.npm/_logs/2020-12-28T13_37_11_997Z-debug.log
 ```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
